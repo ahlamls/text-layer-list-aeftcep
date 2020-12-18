@@ -1,0 +1,87 @@
+<!doctype html>
+<!--
+/*************************************************************************
+* ADOBE CONFIDENTIAL
+* ___________________
+*
+* Copyright 2014 Adobe Inc.
+* All Rights Reserved.
+*
+* NOTICE: Adobe permits you to use, modify, and distribute this file in
+* accordance with the terms of the Adobe license agreement accompanying
+* it. If you have received this file from a source other than Adobe,
+* then your use, modification, or distribution of it requires the prior
+* written permission of Adobe. 
+**************************************************************************/
+-->
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="./assets/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+	<meta charset="utf-8">
+	<script src="./ext.js"></script>
+	<script src="./lib/CSInterface.js"></script>
+	<script src="./lib/jquery-1.9.1.js"></script>
+	<script src="./lib/Vulcan.js"></script>
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+
+
+			// For functions which require interaction at the JavaScript level, we provide these JQuery-based
+			// handlers, instead of directly invoking ExtendScript .This givs the JavaScript layer a chance
+			// to pass data into the ExtendScript layer, and process the results.
+
+			var escape = document.createElement('textarea');
+			function escapeHTML(html) {
+				escape.textContent = html;
+				return escape.innerHTML;
+			}
+
+				var csInterface = new CSInterface();
+			
+
+				csInterface.evalScript('$._ext.sendText()', function (res) {
+					var output = res;
+					var outputx = "";
+					console.log(output);
+					
+					var textList = [];
+					textList = output.split(",");
+					textList.forEach(function(text) {
+						outputx = outputx + ' <li class="list-group-item">' + escapeHTML(text) + '</li>' ;
+					});
+					
+					$("#output").html(outputx);
+
+				});
+			
+			
+		});
+	</script>
+	<link rel="stylesheet" type="text/css" href="./style.css">
+</head>
+
+<body onLoad="onLoaded()">
+<br>
+	<div class="container">
+<div class="row">
+		<a class="col-3 btn btn-primary" href="javascript:history.go(0)">Refresh</a>
+	<h1 class="col-9">Text Layer List</h1>
+</div>
+	<hr>
+	<div class="card" >
+		<ul class="list-group list-group-flush" id="output">
+		</ul>
+	  </div>
+	
+	<!-- <button id="sendtext">Send all text from layers</button> -->
+</div>
+</body>
+
+<script src="./assets/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+</html>
